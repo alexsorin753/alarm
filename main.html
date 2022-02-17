@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <title>Alarm</title>
+      <link rel="stylesheet" href="/styles.css">
+      <link rel="stylesheet" href="/fontawesome/css/all.css">
+      <script src="/script.js"></script>
+      <meta name="viewport" content="width=divice-width, initial-scale=1.0">
+   </head>
+   <body>
+      <div class="current_time">
+         <span><span></span><span>AM</span></span>
+      </div>
+
+      <div class="alarm_container">
+         <div class="timer_alarm">
+            <h2>Timer Alarm</h2>
+            <div>00:00:00</div>
+            <form>
+               <label>Set Timer Alarm</label>
+               <input type="number" min="0" max="12" placeholder="hrs">:
+               <input type="number" min="0" max="59" placeholder="min">:
+               <input type="number" min="0" max="59" placeholder="sec"> 
+               <input type="submit" value="Set">
+            </form>
+            <span>reset timer</span>
+            <!-- <i class="fa-solid fa-stopwatch"></i> -->
+            <!--when the timer is active the form will disapear and the stopwatch icon and the reset timer text will apear-->
+            <!--when you press the reset button the form will apear the time will reset and the reset button and the stopwatch icon will disapear-->
+            <!--when the timer reach the end the icon will change in  "<i class="fa-solid fa-volume-high"></i>" and will flash -->
+
+         </div>
+
+         <div class="alarm_clock">
+            <h2>Alarm Clock</h2>
+            <div>--:--</div>
+            <form>
+               <label>Set Clock Alarm</label>
+               <input type="number" min="0" max="99" placeholder="hrs">:
+               <input type="number" min="0" max="59" placeholder="min">
+               <input type="submit" value="Set">
+            </form>
+            <span>reset alarm</span>
+            <!-- <i class="fa-solid fa-stopwatch"></i> -->
+         </div>
+      </div>
+
+   </body>
+</html>
