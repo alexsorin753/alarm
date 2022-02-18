@@ -9,7 +9,7 @@
    </head>
    <body>
       <div class="current_time">
-         <span></span><span></span>
+         <span></span> <span></span>
       </div>
 
       <div class="alarm_container">
@@ -35,14 +35,20 @@
          <div class="alarm_clock">
             <h2>Alarm Clock</h2>
             <div>--:--</div>
-            <form>
+            <form class="alarm_clock_form">
                <label>Set Clock Alarm</label>
-               <input type="number" min="0" max="99" placeholder="hrs">:
-               <input type="number" min="0" max="59" placeholder="min">
+               
+               <input type="number" min="1" max="12" value="12" placeholder="hrs">:
+               <input type="number" min="0" max="59" value="0" placeholder="min">
+               <select>
+                  <option>AM</option>
+                  <option>PM</option>
+               </select>
                <input type="submit" value="Set">
             </form>
-            <span>reset alarm</span>
-            <!-- <i class="fa-solid fa-stopwatch"></i> -->
+            <span class="alarm_clock_reset">reset alarm</span>
+            <i class="fa-solid fa-stopwatch"></i>
+            <i class="fa-solid fa-volume-high"></i>
          </div>
       </div>
 

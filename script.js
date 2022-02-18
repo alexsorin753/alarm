@@ -1,8 +1,8 @@
 window.onload = function() {
-   console.log('onload'); current_time();
+   current_time();
 }
 document.addEventListener('DOMContentLoaded', function() {
-   console.log('loaded'); timer_alarm();
+   timer_alarm(); alarm_clock()
 });
 
 function current_time() {
@@ -35,13 +35,16 @@ function current_time() {
 }
 
 function timer_alarm() {
-   let timer_alarm = document.querySelector('.timer_alarm');
-   let form = timer_alarm.getElementsByClassName('timer_alarm_form')[0];   
-   let reset_timer = timer_alarm.getElementsByClassName('timer_alarm_reset')[0];
-   let stop_watch = timer_alarm.getElementsByClassName('fa-stopwatch')[0];
-   let alarm_volume = timer_alarm.getElementsByClassName('fa-volume-high')[0];
+   const timer_alarm = document.querySelector('.timer_alarm');
+   const form = timer_alarm.getElementsByClassName('timer_alarm_form')[0];   
+   const reset_timer = timer_alarm.getElementsByClassName('timer_alarm_reset')[0];
+   const stop_watch = timer_alarm.getElementsByClassName('fa-stopwatch')[0];
+   const alarm_volume = timer_alarm.getElementsByClassName('fa-volume-high')[0];
 
    let audio = new Audio('./audio/991.wav');
+
+
+
    form.children[4].addEventListener('click', function(e) {
       e.preventDefault();
       let inp_hrs = form.children[1].value;
@@ -66,17 +69,23 @@ function timer_alarm() {
 
             return hrs_con + min_con + sec_con;
          };
-
+         let audio_interval, alarm_interval;
          let seconds_left = seconds_converter();
-         
+
          function timer() {
-            
             if(seconds_left === 0) {
                clearInterval(set_timer);
                stop_watch.style.display = "none";
                alarm_volume.style.display = "block";
                timer_alarm.style.backgroundColor = "#F4A261";
-               audio.play();
+               audio_interval = setInterval(() => audio.play(), 0);
+               alarm_interval = setInterval(() => {
+                  alarm_volume.animate([
+                     {opacity: 0},
+                     {opacity: 1},
+                     {opacity: 0}
+                  ], 500);
+               }, 500);
             }
 
             let out_hrs = Math.floor( seconds_left / 3600 );
@@ -87,12 +96,17 @@ function timer_alarm() {
             if(out_min < 10) out_min = "0" + out_min;
             if(out_sec < 10) out_sec = "0" + out_sec;
 
+            stop_watch.animate([
+               {opacity: 1},
+               {opacity: 0}
+            ], 1000);
+
             timer_alarm.children[1].textContent = `${out_hrs}:${out_min}:${out_sec}`;
-            seconds_left--;
+            seconds_left--; 
          }
 
          let set_timer = setInterval(timer, 1000);
-
+         
          reset_timer.addEventListener('click', function() {
             clearInterval(set_timer);            
             form.style.display = "flex";
@@ -102,8 +116,98 @@ function timer_alarm() {
             timer_alarm.style.color = "";
             timer_alarm.children[1].textContent = "00:00:00";
             reset_timer.style.display = "none";
-            audio.pause();
+            audio.pause(); clearInterval(audio_interval);
+            clearInterval(alarm_interval);
          });         
-      }
+      };
    });
-}
+};
+
+function alarm_clock() {
+   const alarm_clock = document.querySelector('.alarm_clock');
+   const clock = alarm_clock.children[1];
+   const alarm_form = document.getElementsByClassName('alarm_clock_form')[0];
+   const stop_watch = alarm_clock.getElementsByClassName('fa-stopwatch')[0];
+   const alarm_volume = alarm_clock.getElementsByClassName('fa-volume-high')[0];
+   const alarm_reset = document.getElementsByClassName('alarm_clock_reset')[0];
+
+   let audio = new Audio('./audio/991.wav');
+
+   alarm_form.children[4].addEventListener('click', function(e) {
+      e.preventDefault();
+      const current_time = () => {
+         let time0 = document.querySelector('.current_time').children[0].textContent;
+         let time1 = document.querySelector('.current_time').children[1].textContent;
+
+         return time0.substring(0, 5) + " " + time1;
+      } 
+
+      const inp_hrs = parseInt(alarm_form.children[1].value) ;
+      const inp_min = parseInt(alarm_form.children[2].value) ;
+      const am_pm = alarm_form.children[3].value;
+
+      inp_hrs < 10 ? hrs = "0" + inp_hrs : hrs = inp_hrs;
+      inp_min < 10 ? min = "0" + inp_min : min = inp_min;  
+
+      let txt = `${hrs}:${min} ${am_pm}`; 
+      clock.textContent = txt;
+
+      alarm_clock.style.backgroundColor = "#2A9D8F";
+      alarm_clock.style.color = "white";
+      alarm_reset.style.display = "block";
+      alarm_form.style.display = "none";
+      stop_watch.style.display = "block";
+
+      function anim_watch() {
+         stop_watch.animate([
+                  {opacity: .3},
+                  {opacity: 1}
+               ], 1000);
+      }; anim_watch();
+
+      function anim_alarm() {
+         alarm_volume.animate([
+            {opacity: .3},
+            {opacity: 1}
+         ], 500);
+      };
+
+      function play_audio() {
+         audio.play();
+      }
+
+      let watch_interval = setInterval(anim_watch, 1000);
+      let alarm_interval, alarm_sound;
+      let check_clock = setInterval(() => {
+         if(current_time() === txt) {
+            alarm_clock.style.backgroundColor = "#F4A261";
+            stop_watch.style.display = "none";
+            alarm_volume.style.display = "block";
+
+            clearInterval(check_clock);
+            clearInterval(watch_interval);
+
+            anim_alarm();
+            alarm_interval = setInterval(anim_alarm, 500);
+            alarm_sound = setInterval(play_audio, 0);
+         }
+      }, 1000);
+
+      alarm_reset.addEventListener('click', function() {
+         alarm_clock.style.backgroundColor = "";
+         alarm_clock.style.color = "";
+         alarm_reset.style.display = "none";
+         alarm_form.style.display = "flex";
+         stop_watch.style.display = "none";
+         alarm_volume.style.display = "none";
+         clock.textContent = "--:--"
+
+         audio.pause();
+
+         clearInterval(watch_interval);
+         clearInterval(check_clock);
+         clearInterval(alarm_interval);
+         clearInterval(alarm_sound);
+      });
+   });
+};

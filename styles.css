@@ -82,12 +82,35 @@ html, body {
 .alarm_container > div > span:hover {
   color: grey;
 }
+
+
 .timer_alarm .fa-stopwatch,
 .timer_alarm .fa-volume-high {
   display: none;
 }
+.timer_alarm .fa-volume-high {
+  opacity: 0;  
+}
 .timer_alarm_reset {
   display: none;
+}
+
+
+.alarm_clock .fa-stopwatch,
+.alarm_clock .fa-volume-high {
+  display: none;
+}
+.alarm_clock .fa-stopwatch,
+.alarm_clock .fa-volume-high {
+  opacity: .3;
+}
+.alarm_clock_reset {
+  display: none;
+}
+.alarm_clock_form > select {
+  margin-left: 1rem;
+  font-size: 1.8rem;
+  padding: 1px;
 }
 
 
