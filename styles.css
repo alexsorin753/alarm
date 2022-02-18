@@ -11,7 +11,7 @@ html, body {
   border-bottom: 2px solid black;
   text-align: center;
 }
-.current_time > span > span {
+.current_time > span:nth-child(2) {
   font-size: 3rem;
   color: grey;
 }
@@ -82,6 +82,14 @@ html, body {
 .alarm_container > div > span:hover {
   color: grey;
 }
+.timer_alarm .fa-stopwatch,
+.timer_alarm .fa-volume-high {
+  display: none;
+}
+.timer_alarm_reset {
+  display: none;
+}
+
 
 @media only screen and (max-width: 750px) {
   .alarm_container > div {
