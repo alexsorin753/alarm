@@ -74,9 +74,24 @@ function timer_alarm() {
          let audio_interval, alarm_interval;
          let seconds_left = seconds_converter();
 
+         function time_set(first) {
+            if(!first) seconds_left--;
+            let out_hrs = Math.floor( seconds_left / 3600 );
+            let out_min = Math.floor( (seconds_left % 3600) / 60 );
+            let out_sec = Math.floor( (seconds_left % 3600) % 60 );
+
+            if(out_hrs < 10) out_hrs = "0" + out_hrs;
+            if(out_min < 10) out_min = "0" + out_min;
+            if(out_sec < 10) out_sec = "0" + out_sec;
+
+            timer_alarm.children[1].textContent = `${out_hrs}:${out_min}:${out_sec}`;
+            title.textContent = `Timer Alarm - ${out_hrs}:${out_min}:${out_sec}`;
+            return seconds_left;
+         }; time_set(true);
+
          function timer() {
-            if(seconds_left === 0) {
-               dom_change(undefined, "none", "block", "#F4A261", undefined, undefined, "Alarm is ringing...", "00:00:00");
+            if(time_set() === 0) {
+               dom_change(undefined, "none", "block", "#F4A261", undefined, undefined, "Alarm is ringing...");
 
                clearInterval(set_timer);
                audio_interval = setInterval(() => audio.play(), 0);
@@ -86,40 +101,29 @@ function timer_alarm() {
                      {opacity: 1},
                      {opacity: 0}
                   ], 500);
-               }, 500); return;
+               }, 500);
+            } else {
+               stop_watch.animate([
+                  {opacity: 1},
+                  {opacity: 0}
+               ], 1000);               
             };
-
-            let out_hrs = Math.floor( seconds_left / 3600 );
-            let out_min = Math.floor( (seconds_left % 3600) / 60 );
-            let out_sec = Math.floor( (seconds_left % 3600) % 60 );
-
-            if(out_hrs < 10) out_hrs = "0" + out_hrs;
-            if(out_min < 10) out_min = "0" + out_min;
-            if(out_sec < 10) out_sec = "0" + out_sec;
-
-            stop_watch.animate([
-               {opacity: 1},
-               {opacity: 0}
-            ], 1000);
-
-            timer_alarm.children[1].textContent = `${out_hrs}:${out_min}:${out_sec}`;
-            title.textContent = `Timer Alarm - ${out_hrs}:${out_min}:${out_sec}`;
-            seconds_left--;
          };
-
          let set_timer = setInterval(timer, 1000);
          
          reset_timer.addEventListener('click', function() {
             dom_change("flex", "none", "none", "", "", "none", "Alarm", "00:00:00");
             
-            clearInterval(set_timer);  
-            audio.pause(); clearInterval(audio_interval);
+            audio.pause();
+            audio.currentTime = 0;
+            clearInterval(audio_interval);
+            clearInterval(set_timer);
             clearInterval(alarm_interval);
          });         
       };
    });
 };
-
+// on title maybe add for example "120min until 02:30PM"
 function alarm_clock() {
    const title = document.head.getElementsByTagName('TITLE')[0];
    const alarm_clock = document.querySelector('.alarm_clock');
@@ -197,10 +201,11 @@ function alarm_clock() {
          dom_change("--:--", "Alarm", "", "", "", "", "none", "flex", "none", "none");
 
          audio.pause();
+         audio.currentTime = 0;
+         clearInterval(alarm_sound);
          clearInterval(watch_interval);
          clearInterval(check_clock);
          clearInterval(alarm_interval);
-         clearInterval(alarm_sound);
       });
    });
 };
