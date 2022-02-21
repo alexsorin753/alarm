@@ -15,11 +15,9 @@ function current_time() {
             let pm = time.getHours() % 12;
             if(pm < 10) return '0' + pm;
             else return pm;
-            // pm < 10 ? "0" + pm : pm;
          } else {
             if(time.getHours() < 10) return '0' + time.getHours();
             else return time.getHours();
-            // time.getHours() < 10 ? "0" + time.getHours() : time.getHours();
          }
       }
       let min = () => time.getMinutes() < 10 ? "0" + time.getMinutes() : time.getMinutes();
@@ -35,6 +33,7 @@ function current_time() {
 }
 
 function timer_alarm() {
+   const title = document.head.getElementsByTagName('TITLE')[0];
    const timer_alarm = document.querySelector('.timer_alarm');
    const form = timer_alarm.getElementsByClassName('timer_alarm_form')[0];   
    const reset_timer = timer_alarm.getElementsByClassName('timer_alarm_reset')[0];
@@ -100,6 +99,7 @@ function timer_alarm() {
             ], 1000);
 
             timer_alarm.children[1].textContent = `${out_hrs}:${out_min}:${out_sec}`;
+            title.textContent = `Timer Alarm - ${out_hrs}:${out_min}:${out_sec}`;
             seconds_left--; 
          }
 
@@ -116,12 +116,14 @@ function timer_alarm() {
             reset_timer.style.display = "none";
             audio.pause(); clearInterval(audio_interval);
             clearInterval(alarm_interval);
+            title.textContent = "Alarm";
          });         
       };
    });
 };
 
 function alarm_clock() {
+   const title = document.head.getElementsByTagName('TITLE')[0];
    const alarm_clock = document.querySelector('.alarm_clock');
    const clock = alarm_clock.children[1];
    const alarm_form = document.getElementsByClassName('alarm_clock_form')[0];
@@ -150,6 +152,7 @@ function alarm_clock() {
 
       let txt = `${hrs}:${min} ${am_pm}`; 
       clock.textContent = txt;
+      title.textContent = `Alarm Clock set at ${txt}`
 
       cur_time.style.backgroundColor = "#2A9D8F";
       alarm_clock.style.backgroundColor = "#2A9D8F";
@@ -203,7 +206,8 @@ function alarm_clock() {
          alarm_form.style.display = "flex";
          stop_watch.style.display = "none";
          alarm_volume.style.display = "none";
-         clock.textContent = "--:--"
+         clock.textContent = "--:--";
+         title.textContent = "Alarm";
 
          audio.pause();
          clearInterval(watch_interval);
