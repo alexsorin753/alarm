@@ -76,7 +76,7 @@ function timer_alarm() {
 
          function timer() {
             if(seconds_left === 0) {
-               dom_change(undefined, "none", "block", "#F4A261", undefined, undefined, "bip, bip, bip...");
+               dom_change(undefined, "none", "block", "#F4A261", undefined, undefined, "Alarm is ringing...", "00:00:00");
 
                clearInterval(set_timer);
                audio_interval = setInterval(() => audio.play(), 0);
@@ -86,7 +86,7 @@ function timer_alarm() {
                      {opacity: 1},
                      {opacity: 0}
                   ], 500);
-               }, 500);
+               }, 500); return;
             };
 
             let out_hrs = Math.floor( seconds_left / 3600 );
@@ -182,7 +182,7 @@ function alarm_clock() {
       let alarm_interval, alarm_sound;
       let check_clock = setInterval(() => {
          if(current_time() === txt) {
-            dom_change(undefined, "bip, bip, bip...", "#F4A261", undefined, "#F4A261", undefined, undefined, undefined, "none", "block");
+            dom_change(undefined, "Alarm is ringing...", "#F4A261", undefined, "#F4A261", undefined, undefined, undefined, "none", "block");
 
             clearInterval(check_clock);
             clearInterval(watch_interval);
