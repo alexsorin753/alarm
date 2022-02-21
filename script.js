@@ -49,11 +49,24 @@ function timer_alarm() {
       let inp_sec = form.children[3].value;
 
       if(inp_hrs > 0 || inp_min > 0 || inp_sec > 0) {
-         form.style.display = "none";
-         stop_watch.style.display = "block";
-         reset_timer.style.display = "block";
-         timer_alarm.style.backgroundColor = "#2A9D8F";
-         timer_alarm.style.color = "white";
+         // form.style.display = "none";
+         // stop_watch.style.display = "block";
+         // reset_timer.style.display = "block";
+         // timer_alarm.style.backgroundColor = "#2A9D8F";
+         // timer_alarm.style.color = "white";
+
+         function dom_change(formDIS, stop_watchDIS, alarm_volumeDIS, timer_alarmBGC, timer_alarmCOL, reset_timerDIS, title_txt, timer_alarm_TXT) {
+            if(formDIS != undefined) form.style.display = formDIS;
+            if(stop_watchDIS != undefined) stop_watch.style.display = stop_watchDIS;
+            if(alarm_volumeDIS != undefined) alarm_volume.style.display = alarm_volumeDIS;
+            if(timer_alarmBGC != undefined) timer_alarm.style.backgroundColor = timer_alarmBGC;
+            if(timer_alarmCOL != undefined) timer_alarm.style.color = timer_alarmCOL;
+            if(reset_timerDIS != undefined) reset_timer.style.display = reset_timerDIS;
+            if(title_txt != undefined) title.textContent = title_txt;
+            if(timer_alarm_TXT != undefined) timer_alarm.children[1].textContent = timer_alarm_TXT;
+         }; dom_change("none", "block", undefined, "#2A9D8F", "white", "block",);
+
+
          
          function seconds_converter() {
             let hrs_con = 0;
@@ -88,10 +101,13 @@ function timer_alarm() {
             seconds_left--; 
 
             if(seconds_left === 0) {
+               // stop_watch.style.display = "none";
+               // alarm_volume.style.display = "block";
+               // timer_alarm.style.backgroundColor = "#F4A261";
+               // title.textContent = "bip, bip, bip...";
                clearInterval(set_timer);
-               stop_watch.style.display = "none";
-               alarm_volume.style.display = "block";
-               timer_alarm.style.backgroundColor = "#F4A261";
+               dom_change(undefined, "none", "block", "#F4A261", undefined, undefined, "bip, bip, bip...");
+
                audio_interval = setInterval(() => audio.play(), 0);
                alarm_interval = setInterval(() => {
                   alarm_volume.animate([
@@ -100,24 +116,26 @@ function timer_alarm() {
                      {opacity: 0}
                   ], 500);
                }, 500);
-               title.textContent = "bip, bip, bip..."; why
             };
          };
 
          let set_timer = setInterval(timer, 1000);
          
          reset_timer.addEventListener('click', function() {
-            clearInterval(set_timer);            
-            form.style.display = "flex";
-            stop_watch.style.display = "none";
-            alarm_volume.style.display = "none";
-            timer_alarm.style.backgroundColor = "";
-            timer_alarm.style.color = "";
-            timer_alarm.children[1].textContent = "00:00:00";
-            reset_timer.style.display = "none";
+            // form.style.display = "flex";
+            // stop_watch.style.display = "none";
+            // alarm_volume.style.display = "none";
+            // timer_alarm.style.backgroundColor = "";
+            // timer_alarm.style.color = "";
+            // timer_alarm.children[1].textContent = "00:00:00";
+            // reset_timer.style.display = "none";
+            // title.textContent = "Alarm";   
+
+            dom_change("flex", "none", "none", "", "", "none", "Alarm", "00:00:00");
+            
+            clearInterval(set_timer);  
             audio.pause(); clearInterval(audio_interval);
             clearInterval(alarm_interval);
-            title.textContent = "Alarm";
          });         
       };
    });
@@ -144,24 +162,28 @@ function alarm_clock() {
          return time0.substring(0, 5) + " " + time1;
       } 
 
-      const inp_hrs = parseInt(alarm_form.children[1].value) ;
-      const inp_min = parseInt(alarm_form.children[2].value) ;
+      const inp_hrs = parseInt(alarm_form.children[1].value);
+      const inp_min = parseInt(alarm_form.children[2].value);
       const am_pm = alarm_form.children[3].value;
 
       inp_hrs < 10 ? hrs = "0" + inp_hrs : hrs = inp_hrs;
       inp_min < 10 ? min = "0" + inp_min : min = inp_min;  
 
       let txt = `${hrs}:${min} ${am_pm}`; 
-      clock.textContent = txt;
-      title.textContent = `Alarm Clock set at ${txt}`
 
-      cur_time.style.backgroundColor = "#2A9D8F";
-      cur_time.style.color = "white";
-      alarm_clock.style.backgroundColor = "#2A9D8F";
-      alarm_clock.style.color = "white";
-      alarm_reset.style.display = "block";
-      alarm_form.style.display = "none";
-      stop_watch.style.display = "block";
+      function dom_change(clock_txt, title_txt, cur_timeBGC, cur_timeCOL, alarm_clockBGC, alarm_clockCOL, alarm_resetDIS, alarm_formDIS, stop_watchDIS, alarm_volumeDIS) {
+         if (clock_txt != undefined) clock.textContent = clock_txt;
+         if (title_txt != undefined) title.textContent = title_txt;
+         if (cur_timeBGC != undefined) cur_time.style.backgroundColor = cur_timeBGC;
+         if (cur_timeCOL != undefined) cur_time.style.color = cur_timeCOL;
+         if (alarm_clockBGC != undefined) alarm_clock.style.backgroundColor = alarm_clockBGC;
+         if (alarm_clockCOL != undefined) alarm_clock.style.color = alarm_clockCOL;
+         if (alarm_resetDIS != undefined) alarm_reset.style.display = alarm_resetDIS;
+         if (alarm_formDIS != undefined) alarm_form.style.display = alarm_formDIS;
+         if (stop_watchDIS != undefined) stop_watch.style.display = stop_watchDIS;
+         if (alarm_volumeDIS != undefined) alarm_volume.style.display = alarm_volumeDIS;
+      };
+      dom_change(txt, `Alarm Clock set at ${txt}`, "#2A9D8F", "white", "#2A9D8F", "white", "block", "none", "block");
 
       function anim_watch() {
          stop_watch.animate([
@@ -177,40 +199,23 @@ function alarm_clock() {
          ], 500);
       };
 
-      function play_audio() {
-         audio.play();
-      };
-
       let watch_interval = setInterval(anim_watch, 1000);
       let alarm_interval, alarm_sound;
       let check_clock = setInterval(() => {
          if(current_time() === txt) {
-            cur_time.style.backgroundColor = "#F4A261";
-            alarm_clock.style.backgroundColor = "#F4A261";
-            stop_watch.style.display = "none";
-            alarm_volume.style.display = "block";
+            dom_change(undefined, "bip, bip, bip...", "#F4A261", undefined, "#F4A261", undefined, undefined, undefined, "none", "block");
 
             clearInterval(check_clock);
             clearInterval(watch_interval);
 
             anim_alarm();
             alarm_interval = setInterval(anim_alarm, 500);
-            alarm_sound = setInterval(play_audio, 0);
-            title.textContent = "bip, bip, bip..."
+            alarm_sound = setInterval(() => audio.play(), 0);
          }
       }, 1000);
 
       alarm_reset.addEventListener('click', function() {
-         cur_time.style.backgroundColor = "";
-         cur_time.style.color = "";
-         alarm_clock.style.backgroundColor = "";
-         alarm_clock.style.color = "";
-         alarm_reset.style.display = "none";
-         alarm_form.style.display = "flex";
-         stop_watch.style.display = "none";
-         alarm_volume.style.display = "none";
-         clock.textContent = "--:--";
-         title.textContent = "Alarm";
+         dom_change("--:--", "Alarm", "", "", "", "", "none", "flex", "none", "none");
 
          audio.pause();
          clearInterval(watch_interval);
