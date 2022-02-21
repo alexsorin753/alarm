@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function current_time() {
-   let cur_time = document.querySelector('.current_time');
+   const cur_time = document.querySelector('.current_time');
 
    function set_time() {
       let time = new Date();
@@ -41,9 +41,7 @@ function timer_alarm() {
    const stop_watch = timer_alarm.getElementsByClassName('fa-stopwatch')[0];
    const alarm_volume = timer_alarm.getElementsByClassName('fa-volume-high')[0];
 
-   let audio = new Audio('./audio/991.wav');
-
-
+   const audio = new Audio('./audio/991.wav');
 
    form.children[4].addEventListener('click', function(e) {
       e.preventDefault();
@@ -130,8 +128,9 @@ function alarm_clock() {
    const stop_watch = alarm_clock.getElementsByClassName('fa-stopwatch')[0];
    const alarm_volume = alarm_clock.getElementsByClassName('fa-volume-high')[0];
    const alarm_reset = document.getElementsByClassName('alarm_clock_reset')[0];
+   const cur_time = document.querySelector('.current_time');
 
-   let audio = new Audio('./audio/991.wav');
+   const audio = new Audio('./audio/991.wav');
 
    alarm_form.children[4].addEventListener('click', function(e) {
       e.preventDefault();
@@ -152,6 +151,7 @@ function alarm_clock() {
       let txt = `${hrs}:${min} ${am_pm}`; 
       clock.textContent = txt;
 
+      cur_time.style.backgroundColor = "#2A9D8F";
       alarm_clock.style.backgroundColor = "#2A9D8F";
       alarm_clock.style.color = "white";
       alarm_reset.style.display = "block";
@@ -174,12 +174,14 @@ function alarm_clock() {
 
       function play_audio() {
          audio.play();
-      }
+      };
 
       let watch_interval = setInterval(anim_watch, 1000);
       let alarm_interval, alarm_sound;
       let check_clock = setInterval(() => {
          if(current_time() === txt) {
+            cur_time.style.backgroundColor = "#F4A261";
+            
             alarm_clock.style.backgroundColor = "#F4A261";
             stop_watch.style.display = "none";
             alarm_volume.style.display = "block";
@@ -194,6 +196,7 @@ function alarm_clock() {
       }, 1000);
 
       alarm_reset.addEventListener('click', function() {
+         cur_time.style.backgroundColor = "";
          alarm_clock.style.backgroundColor = "";
          alarm_clock.style.color = "";
          alarm_reset.style.display = "none";
@@ -203,7 +206,6 @@ function alarm_clock() {
          clock.textContent = "--:--"
 
          audio.pause();
-
          clearInterval(watch_interval);
          clearInterval(check_clock);
          clearInterval(alarm_interval);
