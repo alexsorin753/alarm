@@ -85,7 +85,7 @@ function timer_alarm() {
             if(out_sec < 10) out_sec = "0" + out_sec;
 
             timer_alarm.children[1].textContent = `${out_hrs}:${out_min}:${out_sec}`;
-            title.textContent = `Timer Alarm - ${out_hrs}:${out_min}:${out_sec}`;
+            title.textContent = `${out_hrs}:${out_min}:${out_sec} Timer`;
             return seconds_left;
          }; time_set(true);
 
@@ -123,7 +123,7 @@ function timer_alarm() {
       };
    });
 };
-// on title maybe add for example "120min until 02:30PM"
+
 function alarm_clock() {
    const title = document.head.getElementsByTagName('TITLE')[0];
    const alarm_clock = document.querySelector('.alarm_clock');
@@ -154,6 +154,36 @@ function alarm_clock() {
 
       let txt = `${hrs}:${min} ${am_pm}`; 
 
+      function minutes_for_title(first_call) {
+         const currentTime = cur_time.children[0].textContent;
+         const currentAM_PM = cur_time.children[1].textContent;
+
+         let currentH = parseInt(currentTime);
+         let currentM = parseInt(currentTime.substring(3, 5));
+
+         let inputH = inp_hrs;
+
+         if(currentAM_PM === "PM" && currentH < 12) currentH = currentH + 12;
+         else if (currentAM_PM === "AM" && currentH === 12) currentH = 0;
+
+         if(am_pm === "PM" && inputH < 12) inputH = inputH + 12;
+         else if (am_pm === "AM" && inputH === 12) inputH = 0;
+
+         let result = (inputH - currentH) * 60 + inp_min - currentM;
+
+         function change_title() {
+            if(result < 0) title.textContent = `${1440 - result}' til ${txt}`;
+            else title.textContent = `${result}' til ${txt}`; 
+         }
+
+         if(first_call) change_title();
+         else {
+            if(cur_time.children[0].textContent.substring(6) === "00") change_title();          
+         }
+      }; minutes_for_title(true);
+
+      let title_update = setInterval(minutes_for_title, 1000);
+
       function dom_change(clock_txt, title_txt, cur_timeBGC, cur_timeCOL, alarm_clockBGC, alarm_clockCOL, alarm_resetDIS, alarm_formDIS, stop_watchDIS, alarm_volumeDIS) {
          if (clock_txt != undefined) clock.textContent = clock_txt;
          if (title_txt != undefined) title.textContent = title_txt;
@@ -166,7 +196,7 @@ function alarm_clock() {
          if (stop_watchDIS != undefined) stop_watch.style.display = stop_watchDIS;
          if (alarm_volumeDIS != undefined) alarm_volume.style.display = alarm_volumeDIS;
       };
-      dom_change(txt, `Alarm Clock set at ${txt}`, "#2A9D8F", "white", "#2A9D8F", "white", "block", "none", "block");
+      dom_change(txt, undefined, "#2A9D8F", "white", "#2A9D8F", "white", "block", "none", "block");
 
       function anim_watch() {
          stop_watch.animate([
@@ -206,6 +236,7 @@ function alarm_clock() {
          clearInterval(watch_interval);
          clearInterval(check_clock);
          clearInterval(alarm_interval);
+         clearInterval(title_update);
       });
    });
 };
